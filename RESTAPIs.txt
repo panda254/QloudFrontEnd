@@ -1,0 +1,33 @@
+
+All the rest API's below are given assuming the application is running on localhost on port 5000, if deployed on an external server replace localhost with external server ip address and port
+
+
+Restful API's in the StudentPortal
+
+a) For addition of a course 
+
+   URL = localhost:5000/_add
+   Params:
+   	1) key: a value: <course_to_be_added>
+   	2) key: b value: <Student_Name>
+
+   example:- localhost:5000/_add?a=Cinematic_Adaptation&b=Arpit Panda
+
+
+ b) For substituting one course with another 
+
+ 	URL = localhost:5000/_substitute
+   Params:
+   	1) key: a value: <course_presently_enrolled_in>
+   	2) key: b value: <course_to_substitute_with>
+   	2) key: c value: <Student_Name>
+
+   example:- localhost:5000/_substitute?a=Cinematic_Adaptation&b=Cloud_Computing&c=Arpit Panda
+
+ c) For looking course info 
+
+ 	URL = localhost:5000/course
+   Params:
+   	1) key: a value: <course_name>
+
+   	example:- localhost:5000/course?a=Cinematic_Adaptation

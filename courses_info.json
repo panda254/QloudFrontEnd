@@ -1,0 +1,40 @@
+{
+  "courses":
+  {
+    "Cloud_Computing":
+    {
+      "Name" : "Cloud_Computing",
+      "Course_No" : "F2114",
+      "Comp_Code" : "1110",
+      "Instructor": "A"
+    },
+    "Modern_Poilitical_Concepts":
+    {
+      "Name" : "Modern_Poilitical_Concepts",
+      "Course_No" : "F2115",
+      "Comp_Code" : "1111",
+      "Instructor": "B"
+    },
+    "Advanced_Algorithms":
+    {
+      "Name" : "Advanced_Algorithms",
+      "Course_No" : "F2116",
+      "Comp_Code" : "1112",
+      "Instructor": "C"
+    },
+    "Cinematic_Adaptation":
+    {
+      "Name" : "Cinematic_Adaptation",
+      "Course_No" : "F2117",
+      "Comp_Code" : "1113",
+      "Instructor": "D"
+    },
+    "Short_Film_And_Video_Production":
+    {
+      "Name" : "Short_Film_And_Video_Production",
+      "Course_No" : "F2118",
+      "Comp_Code" : "1114",
+      "Instructor": "E"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Add Course{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>
+    <li hidden name="Sname">{% if name %}{{ name }}{% else %}Stranger{% endif %}</li>
+</div>
+
+<script type=text/javascript src="{{
+  url_for('static', filename='jquery.js') }}"></script>
+
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+<script type=text/javascript>
+  $(
+    function()
+    {
+        $('#add').bind('click',
+        function()
+            {
+              $.getJSON
+              ( $SCRIPT_ROOT + '/_add',
+                  {
+                    a: $('select[name="available"]').val(),
+                    b: $('li[name="Sname"]').text()
+                  }
+              );
+              var x = document.getElementById("available");
+              x.remove(x.selectedIndex);
+              return false;
+            }
+        );
+    }
+    );
+</script>
+
+<span>
+    <b>Courses Available</b>
+    <br/>
+    <br/>
+
+    <select name="available" id="available">
+        {% for opt in available %}
+            <option value= {{opt}}>{{opt}}</option>
+        {% endfor %}
+    </select>
+
+
+    <br/>
+    <br/>
+
+    <button href='#' id=add type="submit">Add</button>
+</span>
+<!--{{ wtf.quick_form(form) }}-->
+{% endblock %}

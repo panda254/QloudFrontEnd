@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Substitue Course{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>
+    <li hidden name="Sname">{% if name %}{{ name }}{% else %}Stranger{% endif %}</li>
+</div>
+
+<script type=text/javascript src="{{
+  url_for('static', filename='jquery.js') }}"></script>
+
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+<script type=text/javascript>
+  $(
+    function()
+    {
+        $('#submit').bind('click',
+        function()
+            {
+              $.getJSON
+              ( $SCRIPT_ROOT + '/_substitute',
+                  {
+                    a: $('select[name="enrol"]').val(),
+                    b: $('select[name="substi"]').val(),
+                    c: $('li[name="Sname"]').text()
+                  }
+              );
+              var x = document.getElementById("enrol");
+
+              val1 = $('select[name="enrol"]').val()
+              val2 = $('select[name="substi"]').val()
+
+              x.remove(x.selectedIndex);
+
+              var option = document.createElement("option");
+              option.text = val2;
+              x.add(option);
+
+              var y = document.getElementById("substi");
+              y.remove(y.selectedIndex);
+
+              var option2 = document.createElement("option");
+              option2.text = val1;
+              y.add(option2);
+
+              return false;
+            }
+        );
+    }
+    );
+</script>
+{% block script %}
+    <script type=text/javascript>
+      $(function() {
+        $('a#calculate').bind('click', function() {
+          $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
+            a: $('input[name="a"]').val(),
+            b: $('input[name="b"]').val()
+          }, function(data) {
+            $("#result").text(data.result);
+          });
+          return false;
+        });
+      });
+    </script>
+{% endblock script %}
+
+<span>
+    <b>Enrolled Courses</b>
+    <br/>
+    <br/>
+    <select name="enrol" id="enrol">
+        {% for opt in enrolled %}
+            <option value= {{opt}}>{{opt}}</option>
+        {% endfor %}
+    </select>
+
+    <br/>
+    <br/>
+
+    <b>Substitute With</b>
+    <br/>
+    <br/>
+    <select name="substi" id="substi">
+        {% for opt in substis %}
+            <option value={{opt}}>{{opt}}</option>
+        {% endfor %}
+    </select>
+
+    <br/>
+    <br/>
+
+    <button href='#' id=submit type="submit">Submit</button>
+</span>
+
+<!--<h1>jQuery Example</h1>-->
+<!--<p><input type=text size=5 name=a> +-->
+   <!--<input type=text size=5 name=b> =-->
+   <!--<span id=result>?</span>-->
+<!--<p><a href=# id=calculate>calculate server side</a>-->
+
+
+<!--{{ wtf.quick_form(form) }}-->
+
+{% endblock %}

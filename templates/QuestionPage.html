@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Qloud{% endblock %}
+
+{% block page_content %}
+
+<script type=text/javascript src="{{url_for('static', filename='jquery.js') }}"></script>
+
+<script type=text/javascript>
+	$SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+</script>
+
+<script type=text/javascript>
+  $(
+    function()
+    {
+        $('#submitQue').bind('click',
+        function()
+            {
+              $.getJSON
+              ( $SCRIPT_ROOT + '/sendQuestion',
+                  {
+                    question: $('textarea[name="question"]').val(),
+                  }
+              );
+              return false;
+            }
+        );
+    }
+    );
+</script>
+
+<!-- <script type="text/javascript">
+    document.getElementById("viewAnswers").onClick = function () {
+        location.href = "http://127.0.0.1:5000/viewAnswer/What?";
+    };
+</script> -->
+
+<div class="page-header">
+    <h1>Hello, Ask A Question!</h1>
+</div>
+
+<form>
+
+	<div class="jumbotron">
+		
+		<div class="input-group">
+	     <!--  <span class="input-group-addon"> <img src ="{{ url_for('static', filename='logo.ico') }} " alt="Question" style="width:32px;height:32px;"> </img> </span> -->
+
+	      <span class="input-group-addon"> Question </span>
+	      <textarea id="question" type="text" class="form-control" name="question" placeholder="Type your Question here" rows="5"> </textarea>
+	    
+	    </div>
+
+	    <br/>
+	    <br/>
+	    <br/>
+
+	    <div class=container>
+	    	<div class="row">
+			    <div class="col-md-offset-5">
+			    	<button type="button" class="btn btn-info" id="submitQue">Submit</button>
+
+			   	</div>
+
+			   	<br/>
+			   	<br/>
+			   	<br/>
+			   	
+			   	<div class="col-md-offset-5">
+
+			   		<!-- <a href=" {{url_for('viewAnswer', question = 'What' )}} "> -->
+			   		<!-- <a href=" http://127.0.0.1:5000/viewAnswer/What " id="getAnswer"> -->
+
+			    	<!-- <button type="button" class="btn btn-info" id="viewAnswers" onClick="location.href ='http://127.0.0.1:5000/viewAnswer/What?';">View Answers</button> -->
+			    	<button type="button" class="btn btn-info" id="viewAnswers", onClick="redirect()">View Answers</button>
+			    	<script type="text/javascript">
+				    function redirect()
+				    {
+				    	location.href ='http://127.0.0.1:5000/viewAnswer/' +  $('textarea[name="question"]').val() ;
+				    }
+				    </script>
+				</div>
+
+		    </div>
+
+			 <div id="answers">
+			 	{% if answers %}
+			 	{% for answer in answers %}
+				 	<div class="jumbotron">
+					 	<div class="panel panel-default">
+
+						     <div class="panel-heading">
+						        <h4 class="panel-title">
+						          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Answer, {{loop.index}} </a>
+						        </h4>
+						     </div>
+
+						     <div id="collapse1" class="panel-collapse collapse in">
+						        <div class="panel-body"> {{answer}} </div>
+						     </div>
+					    </div>
+					</div>
+				{% endfor %}
+				{% endif %}
+
+
+			 </div>
+
+	   </div>
+
+	</div>
+
+    <!-- <div class="input-group">
+      <span class="input-group-addon">Text</span>
+      <input id="msg" type="text" class="form-control" name="msg" placeholder="Additional Info">
+    </div> -->
+</form>
+<br>
+
+
+{% endblock %}
+
+
+

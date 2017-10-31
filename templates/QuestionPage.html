@@ -31,11 +31,6 @@
     );
 </script>
 
-<!-- <script type="text/javascript">
-    document.getElementById("viewAnswers").onClick = function () {
-        location.href = "http://127.0.0.1:5000/viewAnswer/What?";
-    };
-</script> -->
 
 <div class="page-header">
     <h1>Hello, Ask A Question!</h1>
@@ -46,7 +41,6 @@
 	<div class="jumbotron">
 		
 		<div class="input-group">
-	     <!--  <span class="input-group-addon"> <img src ="{{ url_for('static', filename='logo.ico') }} " alt="Question" style="width:32px;height:32px;"> </img> </span> -->
 
 	      <span class="input-group-addon"> Question </span>
 	      <textarea id="question" type="text" class="form-control" name="question" placeholder="Type your Question here" rows="5"> </textarea>
@@ -60,7 +54,7 @@
 	    <div class=container>
 	    	<div class="row">
 			    <div class="col-md-offset-5">
-			    	<button type="button" class="btn btn-info" id="submitQue">Submit</button>
+			    	<button type="button" class="btn btn-info" id="submitQue">Create your Question</button>
 
 			   	</div>
 
@@ -70,15 +64,11 @@
 			   	
 			   	<div class="col-md-offset-5">
 
-			   		<!-- <a href=" {{url_for('viewAnswer', question = 'What' )}} "> -->
-			   		<!-- <a href=" http://127.0.0.1:5000/viewAnswer/What " id="getAnswer"> -->
-
-			    	<!-- <button type="button" class="btn btn-info" id="viewAnswers" onClick="location.href ='http://127.0.0.1:5000/viewAnswer/What?';">View Answers</button> -->
 			    	<button type="button" class="btn btn-info" id="viewAnswers", onClick="redirect()">View Answers</button>
 			    	<script type="text/javascript">
 				    function redirect()
 				    {
-				    	location.href ='http://127.0.0.1:5000/viewAnswer/' +  $('textarea[name="question"]').val() ;
+				    	location.href ='http://172.18.16.55:5000/viewAnswer/' +  $('textarea[name="question"]').val() ;
 				    }
 				    </script>
 				</div>
@@ -112,10 +102,6 @@
 
 	</div>
 
-    <!-- <div class="input-group">
-      <span class="input-group-addon">Text</span>
-      <input id="msg" type="text" class="form-control" name="msg" placeholder="Additional Info">
-    </div> -->
 </form>
 <br>
 

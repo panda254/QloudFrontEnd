@@ -8,6 +8,7 @@ from wtforms.validators import Required
 import os
 import requests
 import json
+from py4j.java_gateway import JavaGateway
 
 app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'hard to guess string'
@@ -35,7 +36,7 @@ def index():
 @app.route('/sendQuestion', methods=['GET', 'POST'])
 def sendQuestion():
     question = request.args.get('question', '0', type=str)
-    
+    db.createQuestion(question)
     print question
     
     return question
@@ -59,4 +60,6 @@ def viewAnswer(question):
 
 if __name__ == '__main__':
        # app.run(debug=True)
+	gateway = JavaGateway()
+	db = gateway.entry_point.getDatabase()
         manager.run()

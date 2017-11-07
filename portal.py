@@ -37,23 +37,34 @@ def index():
 @app.route('/sendQuestion', methods=['GET', 'POST'])
 def sendQuestion():
     question = request.args.get('question', '0', type=str)
-    db.createQuestion(question)
-    print question
+    qid = db.createQuestion(question)
     
-    return question
-
-@app.route('/_createAnswer', methods=['GET', 'POST'])
-def _createAnswer():
-    qid = request.args.get('qid', '0', type=str)
-    answer = request.args.get('answer', '1' , type=str)
-    db.createAnswer(qid,answer)
-
     ret_json = {}
-    ret_json['qid'] = qid
-    ret_json['answer'] = answer
+    ret_json['qid']= qid
+    ret_json['question'] = question
     
     return json.dumps(ret_json)
 
+@app.route('/_createAnswer', methods=['GET', 'POST'])
+def _createAnswer():
+   	qid = request.args.get('qid', '0', type=str)
+    	answer = request.args.get('answer', '1' , type=str)
+    	db.createAnswer(qid,answer)
+
+    	question_xml= db.readQuestion(qid)
+	ret_json = {}
+	question_dict = {}
+	xmldoc = minidom.parseString(question_xml)
+	itemlist = xmldoc.getElementsByTagName('question')
+	ret_json['question'] = question_dict
+	ret_json['question']['id'] = itemlist[0].attributes['id'].value
+
+	answer_list = xmldoc.getElementsByTagName('answer')
+	for answer in answer_list:
+		ret_json['question']['answer'+answer.attributes['id'].value] = answer.firstChild.nodeValue			
+	    
+	return json.dumps(ret_json)
+    
 @app.route('/askQuestion', methods=['GET', 'POST'])
 def askQuestion():
 	return render_template('QuestionPage.html')
@@ -111,14 +122,12 @@ def _searchQuestion():
 			ret_json['questions'].append(question_dict)
 			
     
-    return json.dumps(ret_json)\
+    return json.dumps(ret_json)
 
 @app.route('/_viewAnswers', methods=['GET', 'POST'])
 def _viewAnswers():
     qid = request.args.get('qid', '0', type=str)
-    print "1"
     question_xml= db.readQuestion(qid)
-    print "2"
     ret_json = {}
     question_dict = {}
     xmldoc = minidom.parseString(question_xml)
@@ -146,6 +155,7 @@ def createAnswer(answer,question):
 	print "answer= " + answer
 	
 	return render_template('editAnswer.html',question=question)
+	
 
 
 @app.route('/writeAnswer/<question>')

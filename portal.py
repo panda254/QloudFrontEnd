@@ -9,6 +9,7 @@ import os
 import requests
 import json
 from py4j.java_gateway import JavaGateway
+from xml.dom import minidom
 
 app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'hard to guess string'
@@ -41,6 +42,18 @@ def sendQuestion():
     
     return question
 
+@app.route('/_createAnswer', methods=['GET', 'POST'])
+def _createAnswer():
+    qid = request.args.get('qid', '0', type=str)
+    answer = request.args.get('answer', '1' , type=str)
+    db.createAnswer(qid,answer)
+
+    ret_json = {}
+    ret_json['qid'] = qid
+    ret_json['answer'] = answer
+    
+    return json.dumps(ret_json)
+
 @app.route('/askQuestion', methods=['GET', 'POST'])
 def askQuestion():
 	return render_template('QuestionPage.html')
@@ -57,6 +70,88 @@ def viewAnswer(question):
 	print "hello"
 
 	return render_template('QuestionPage.html',answers=answers)
+
+@app.route('/searchQue')
+def searchQue():
+	return render_template('searchQue.html')
+
+@app.route('/searchQuestion/<question>')
+def searchQuestion(question):
+	
+	print "here " + question
+	try:	
+		question_str = db.searchQuestion(question)
+	except:
+		return render_template('searchQue.html') 
+	question_list = question_str.split(';')
+	questions = []
+	for index,question in enumerate(question_list):
+		if (index%2!=0):
+			questions.append(question)
+
+	return render_template('searchQue.html',questions=questions)
+
+@app.route('/_searchQuestion', methods=['GET', 'POST'])
+def _searchQuestion():
+    question = request.args.get('question', '0', type=str)
+    try:
+    	question_str= db.searchQuestion(question)
+    except Exception as e :
+	return "No question present"
+    question_list = question_str.split(';')
+    ret_json = {}
+    ret_json['questions'] = []
+    for index,question in enumerate(question_list):
+		if (index%2!=0):
+			x = index/2
+			ret_json['questions'][x]['question']=question
+		else:
+			question_dict = {}
+			question_dict['id'] = question
+			ret_json['questions'].append(question_dict)
+			
+    
+    return json.dumps(ret_json)\
+
+@app.route('/_viewAnswers', methods=['GET', 'POST'])
+def _viewAnswers():
+    qid = request.args.get('qid', '0', type=str)
+    print "1"
+    question_xml= db.readQuestion(qid)
+    print "2"
+    ret_json = {}
+    question_dict = {}
+    xmldoc = minidom.parseString(question_xml)
+    itemlist = xmldoc.getElementsByTagName('question')
+    ret_json['question'] = question_dict
+    ret_json['question']['id'] = itemlist[0].attributes['id'].value
+
+    answer_list = xmldoc.getElementsByTagName('answer')
+    for answer in answer_list:
+	ret_json['question']['answer'+answer.attributes['id'].value] = answer.firstChild.nodeValue			
+    
+    return json.dumps(ret_json)
+
+@app.route('/createAnswer/<answer>/<question>')
+def createAnswer(answer,question):
+	
+	print "in createAnswer " + question	
+	question_str = db.searchQuestion(question)
+	question_list = question_str.split(';')
+	questions = []
+	
+	db.createAnswer(question_list[0],answer)
+	
+	print "qid = " + question_list[0]
+	print "answer= " + answer
+	
+	return render_template('editAnswer.html',question=question)
+
+
+@app.route('/writeAnswer/<question>')
+def writeAnswer(question):
+	
+	return render_template('editAnswer.html',question=question)
 
 if __name__ == '__main__':
        # app.run(debug=True)

@@ -101,6 +101,9 @@ def searchQuestion(question):
 		question_str = db.searchQuestion(question)
 	except:
 		return render_template('searchQue.html') 
+	
+	if question_str is None:
+		return render_template('searchQue.html')
 	question_list = question_str.split(';')
 	questions = []
 	for index,question in enumerate(question_list):
@@ -115,6 +118,9 @@ def _searchQuestion():
     try:
     	question_str= db.searchQuestion(question)
     except Exception as e :
+	return "No question present"
+
+    if question_str is None:
 	return "No question present"
     question_list = question_str.split(';')
     ret_json = {}

@@ -64,6 +64,13 @@ def _createAnswer():
 		ret_json['question']['answer'+answer.attributes['id'].value] = answer.firstChild.nodeValue			
 	    
 	return json.dumps(ret_json)
+
+@app.route('/_deleteQuestion', methods=['GET', 'POST'])
+def _deleteQuestion():
+   	qid = request.args.get('qid', '0', type=str)
+    	db.deleteQuestion(qid)
+
+    	return None
     
 @app.route('/askQuestion', methods=['GET', 'POST'])
 def askQuestion():

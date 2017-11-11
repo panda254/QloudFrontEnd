@@ -70,7 +70,7 @@ def _deleteQuestion():
    	qid = request.args.get('qid', '0', type=str)
     	db.deleteQuestion(qid)
 
-    	return None
+    	return True
     
 @app.route('/askQuestion', methods=['GET', 'POST'])
 def askQuestion():
